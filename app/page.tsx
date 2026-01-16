@@ -305,27 +305,26 @@ export default function HomePage() {
             <div>
               <h4 className="font-semibold text-white mb-4">Product</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#" className="hover:text-pink-400 transition-colors">How it Works</Link></li>
-                <li><Link href="#" className="hover:text-pink-400 transition-colors">Pricing</Link></li>
-                <li><Link href="#" className="hover:text-pink-400 transition-colors">For Pharmacies</Link></li>
+                <li><Link href="/how-it-works" className="hover:text-pink-400 transition-colors">How it Works</Link></li>
+                <li><Link href="/pricing" className="hover:text-pink-400 transition-colors">Pricing</Link></li>
+                <li><Link href="/for-pharmacies" className="hover:text-pink-400 transition-colors">For Pharmacies</Link></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold text-white mb-4">Company</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#" className="hover:text-pink-400 transition-colors">About Us</Link></li>
-                <li><Link href="#" className="hover:text-pink-400 transition-colors">Contact</Link></li>
-                <li><Link href="#" className="hover:text-pink-400 transition-colors">Careers</Link></li>
+                <li><Link href="/about" className="hover:text-pink-400 transition-colors">About Us</Link></li>
+                <li><Link href="/contact" className="hover:text-pink-400 transition-colors">Contact</Link></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold text-white mb-4">Legal</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="#" className="hover:text-pink-400 transition-colors">Privacy Policy</Link></li>
-                <li><Link href="#" className="hover:text-pink-400 transition-colors">Terms of Service</Link></li>
-                <li><Link href="#" className="hover:text-pink-400 transition-colors">Security</Link></li>
+                <li><Link href="/privacy" className="hover:text-pink-400 transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-pink-400 transition-colors">Terms of Service</Link></li>
+                <li><Link href="/security" className="hover:text-pink-400 transition-colors">Security</Link></li>
               </ul>
             </div>
           </div>

@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
                 <Heart className="w-5 h-5 text-white fill-white" />
               </div>
               <span className="font-display font-bold text-lg text-white">
-                HealthWallet
+                CareWallet
               </span>
             </div>
             <p className="text-sm text-gray-400">
@@ -27,30 +27,35 @@ export const Footer: React.FC = () => {
             <h3 className="font-display font-semibold text-white mb-4">Product</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/auth/signup" className="hover:text-pink-400 transition-colors">
-                  Create Wallet
-                </Link>
-              </li>
-              <li>
-                <Link href="/#how-it-works" className="hover:text-pink-400 transition-colors">
+                <Link href="/how-it-works" className="hover:text-pink-400 transition-colors">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/#features" className="hover:text-pink-400 transition-colors">
-                  Features
+                <Link href="/pricing" className="hover:text-pink-400 transition-colors">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/for-pharmacies" className="hover:text-pink-400 transition-colors">
+                  For Pharmacies
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Company */}
           <div>
-            <h3 className="font-display font-semibold text-white mb-4">Support</h3>
+            <h3 className="font-display font-semibold text-white mb-4">Company</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/help" className="hover:text-pink-400 transition-colors">
-                  Help Center
+                <Link href="/about" className="hover:text-pink-400 transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-pink-400 transition-colors">
+                  Contact
                 </Link>
               </li>
               <li>
@@ -64,8 +69,8 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-pink-400 transition-colors">
-                  Contact Us
+                <Link href="/security" className="hover:text-pink-400 transition-colors">
+                  Security
                 </Link>
               </li>
             </ul>
@@ -77,8 +82,8 @@ export const Footer: React.FC = () => {
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-pink-400" />
-                <a href="mailto:hello@healthwallet.co.za" className="hover:text-pink-400 transition-colors">
-                  hello@healthwallet.co.za
+                <a href="mailto:hello@carewallet.co.za" className="hover:text-pink-400 transition-colors">
+                  hello@carewallet.co.za
                 </a>
               </li>
               <li className="flex items-center gap-2">
@@ -89,7 +94,7 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-pink-400 mt-1" />
-                <span>Johannesburg, South Africa</span>
+                <span>Boksburg, Gauteng, South Africa</span>
               </li>
             </ul>
           </div>
@@ -97,8 +102,8 @@ export const Footer: React.FC = () => {
 
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
-            <p>&copy; {new Date().getFullYear()} HealthWallet. All rights reserved.</p>
-            <p>Made with ❤️ for healthier communities</p>
+            <p>&copy; {new Date().getFullYear()} CareWallet. A product of OMNIHEALTH GROUP (Pty) Ltd.</p>
+            <p>Made with love in South Africa</p>
           </div>
         </div>
       </div>
