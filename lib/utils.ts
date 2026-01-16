@@ -27,3 +27,11 @@ export function generateShareableCode(): string {
 export function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString()
 }
+
+export function generateShortCode(length: number = 6): string {
+  return Math.random().toString(36).substring(2, 2 + length).toUpperCase()
+}
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
