@@ -78,7 +78,7 @@ export default function HomePage() {
                 <div className="flex items-center space-x-4 mb-6">
                   <div className="w-16 h-16 rounded-full overflow-hidden">
                     <Image
-                      src="https://images.pexels.com/photos/7659869/pexels-photo-7659869.jpeg"
+                      src="https://images.pexels.com/photos/4034262/pexels-photo-4034262.jpeg"
                       alt="Person receiving care"
                       width={64}
                       height={64}
@@ -279,7 +279,7 @@ export default function HomePage() {
           <Link href="/auth/signup">
             <Button
               size="lg"
-              className="bg-white text-pink-600 hover:bg-gray-50 shadow-xl"
+              className="!bg-white !from-white !to-white text-pink-600 hover:!bg-gray-50 shadow-xl"
             >
               Create Your Free Wallet
               <ArrowRight className="ml-2 w-5 h-5" />
