@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="bg-gradient-to-br from-primary-500 to-coral-500 p-2 rounded-xl">
+              <div className="bg-gradient-to-br from-pink-500 to-rose-500 p-2 rounded-xl">
                 <Heart className="w-5 h-5 text-white fill-white" />
               </div>
               <span className="font-display font-bold text-lg text-white">
@@ -27,17 +27,17 @@ export const Footer: React.FC = () => {
             <h3 className="font-display font-semibold text-white mb-4">Product</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/auth/signup" className="hover:text-primary-400 transition-colors">
+                <Link href="/auth/signup" className="hover:text-pink-400 transition-colors">
                   Create Wallet
                 </Link>
               </li>
               <li>
-                <Link href="/#how-it-works" className="hover:text-primary-400 transition-colors">
+                <Link href="/#how-it-works" className="hover:text-pink-400 transition-colors">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/#features" className="hover:text-primary-400 transition-colors">
+                <Link href="/#features" className="hover:text-pink-400 transition-colors">
                   Features
                 </Link>
               </li>
@@ -49,22 +49,22 @@ export const Footer: React.FC = () => {
             <h3 className="font-display font-semibold text-white mb-4">Support</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/help" className="hover:text-primary-400 transition-colors">
+                <Link href="/help" className="hover:text-pink-400 transition-colors">
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-primary-400 transition-colors">
+                <Link href="/privacy" className="hover:text-pink-400 transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-primary-400 transition-colors">
+                <Link href="/terms" className="hover:text-pink-400 transition-colors">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-primary-400 transition-colors">
+                <Link href="/contact" className="hover:text-pink-400 transition-colors">
                   Contact Us
                 </Link>
               </li>
@@ -76,19 +76,19 @@ export const Footer: React.FC = () => {
             <h3 className="font-display font-semibold text-white mb-4">Get in Touch</h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-primary-400" />
-                <a href="mailto:hello@healthwallet.co.za" className="hover:text-primary-400 transition-colors">
+                <Mail className="w-4 h-4 text-pink-400" />
+                <a href="mailto:hello@healthwallet.co.za" className="hover:text-pink-400 transition-colors">
                   hello@healthwallet.co.za
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-primary-400" />
-                <a href="tel:+27123456789" className="hover:text-primary-400 transition-colors">
+                <Phone className="w-4 h-4 text-pink-400" />
+                <a href="tel:+27123456789" className="hover:text-pink-400 transition-colors">
                   +27 12 345 6789
                 </a>
               </li>
               <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-primary-400 mt-1" />
+                <MapPin className="w-4 h-4 text-pink-400 mt-1" />
                 <span>Johannesburg, South Africa</span>
               </li>
             </ul>

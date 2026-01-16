@@ -39,7 +39,7 @@ export default function DashboardPage() {
   const activeWallets = wallets.filter(w => w.status === 'active').length
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-coral-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
       <Navigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -56,10 +56,10 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Total Balance</p>
-                  <p className="text-3xl font-bold text-teal-600">{formatCurrency(totalBalance)}</p>
+                  <p className="text-3xl font-bold text-pink-600">{formatCurrency(totalBalance)}</p>
                 </div>
-                <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-teal-600" />
+                <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-pink-600" />
                 </div>
               </div>
             </CardContent>
@@ -70,10 +70,10 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Active Wallets</p>
-                  <p className="text-3xl font-bold text-coral-600">{activeWallets}</p>
+                  <p className="text-3xl font-bold text-rose-500">{activeWallets}</p>
                 </div>
-                <div className="w-12 h-12 bg-coral-100 rounded-xl flex items-center justify-center">
-                  <Heart className="w-6 h-6 text-coral-600" fill="currentColor" />
+                <div className="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center">
+                  <Heart className="w-6 h-6 text-rose-500" fill="currentColor" />
                 </div>
               </div>
             </CardContent>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
           
           {isLoading ? (
             <div className="text-center py-12">
-              <div className="animate-spin w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full mx-auto"></div>
+              <div className="animate-spin w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full mx-auto"></div>
               <p className="mt-4 text-gray-600">Loading wallets...</p>
             </div>
           ) : wallets.length === 0 ? (
@@ -121,7 +121,7 @@ export default function DashboardPage() {
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-start space-x-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-coral-400 rounded-xl flex-shrink-0"></div>
+                        <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-rose-400 rounded-xl flex-shrink-0"></div>
                         <div>
                           <CardTitle>{wallet.walletName}</CardTitle>
                           {wallet.beneficiary && (
@@ -132,7 +132,7 @@ export default function DashboardPage() {
                         </div>
                       </div>
                       <Link href={`/dashboard/wallet/${wallet.id}`}>
-                        <ExternalLink className="w-5 h-5 text-gray-400 hover:text-teal-600" />
+                        <ExternalLink className="w-5 h-5 text-gray-400 hover:text-pink-600" />
                       </Link>
                     </div>
                   </CardHeader>
@@ -155,7 +155,7 @@ export default function DashboardPage() {
                       {wallet.fundingGoal && (
                         <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                           <div 
-                            className="h-full bg-gradient-to-r from-teal-500 to-coral-500"
+                            className="h-full bg-gradient-to-r from-pink-500 to-rose-500"
                             style={{ width: `${Math.min((wallet.balance / wallet.fundingGoal) * 100, 100)}%` }}
                           ></div>
                         </div>

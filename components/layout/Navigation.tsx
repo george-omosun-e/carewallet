@@ -18,21 +18,21 @@ export default function Navigation() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="bg-gradient-to-br from-teal-500 to-coral-500 p-2 rounded-xl">
+              <div className="bg-gradient-to-br from-pink-500 to-rose-500 p-2 rounded-xl">
                 <Heart className="w-6 h-6 text-white" fill="white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-coral-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
                 CareWallet
               </span>
             </Link>
             
             <div className="hidden md:flex items-center space-x-6">
-              <Link href="/auth/login" className="text-gray-700 hover:text-teal-600 font-medium transition-colors">
+              <Link href="/auth/login" className="text-gray-700 hover:text-pink-600 font-medium transition-colors">
                 Sign In
               </Link>
               <Link 
                 href="/auth/signup" 
-                className="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-2 rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition-all"
+                className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-2 rounded-xl font-semibold hover:from-pink-600 hover:to-rose-600 transition-all"
               >
                 Get Started
               </Link>
@@ -52,14 +52,14 @@ export default function Navigation() {
             <div className="px-4 py-4 space-y-3">
               <Link 
                 href="/auth/login" 
-                className="block text-gray-700 hover:text-teal-600 font-medium py-2"
+                className="block text-gray-700 hover:text-pink-600 font-medium py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Sign In
               </Link>
               <Link 
                 href="/auth/signup" 
-                className="block bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-2 rounded-xl font-semibold text-center"
+                className="block bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-2 rounded-xl font-semibold text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Get Started
@@ -77,10 +77,10 @@ export default function Navigation() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/dashboard" className="flex items-center space-x-2">
-              <div className="bg-gradient-to-br from-teal-500 to-coral-500 p-2 rounded-xl">
+              <div className="bg-gradient-to-br from-pink-500 to-rose-500 p-2 rounded-xl">
                 <Heart className="w-6 h-6 text-white" fill="white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-coral-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
                 CareWallet
               </span>
             </Link>
@@ -89,7 +89,7 @@ export default function Navigation() {
               <Link 
                 href="/dashboard" 
                 className={`text-sm font-medium transition-colors ${
-                  pathname === '/dashboard' ? 'text-teal-600' : 'text-gray-600 hover:text-teal-600'
+                  pathname === '/dashboard' ? 'text-pink-600' : 'text-gray-600 hover:text-pink-600'
                 }`}
               >
                 Dashboard
@@ -97,12 +97,12 @@ export default function Navigation() {
               <Link 
                 href="/settings" 
                 className={`text-sm font-medium transition-colors ${
-                  pathname === '/settings' ? 'text-teal-600' : 'text-gray-600 hover:text-teal-600'
+                  pathname === '/settings' ? 'text-pink-600' : 'text-gray-600 hover:text-pink-600'
                 }`}
               >
                 Settings
               </Link>
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-teal-600">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-pink-600">
                 <User className="w-5 h-5" />
               </button>
             </div>

@@ -68,7 +68,7 @@ export default function WalletDetailPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full"></div>
+        <div className="animate-spin w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full"></div>
       </div>
     )
   }
@@ -94,13 +94,13 @@ export default function WalletDetailPage() {
   const totalWithdrawn = withdrawals.reduce((sum, t) => sum + t.amount, 0)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-coral-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
       <Navigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link 
           href="/dashboard"
-          className="inline-flex items-center text-gray-600 hover:text-teal-600 mb-6 transition-colors"
+          className="inline-flex items-center text-gray-600 hover:text-pink-600 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Dashboard
@@ -140,7 +140,7 @@ export default function WalletDetailPage() {
                 <div className="flex justify-between items-end mb-2">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Current Balance</p>
-                    <p className="text-4xl font-bold text-teal-600">{formatCurrency(wallet.balance)}</p>
+                    <p className="text-4xl font-bold text-pink-600">{formatCurrency(wallet.balance)}</p>
                   </div>
                   {wallet.fundingGoal && (
                     <p className="text-gray-600">of {formatCurrency(wallet.fundingGoal)}</p>
@@ -149,7 +149,7 @@ export default function WalletDetailPage() {
                 {wallet.fundingGoal && (
                   <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-teal-500 to-coral-500"
+                      className="h-full bg-gradient-to-r from-pink-500 to-rose-500"
                       style={{ width: `${Math.min((wallet.balance / wallet.fundingGoal) * 100, 100)}%` }}
                     ></div>
                   </div>
@@ -173,9 +173,9 @@ export default function WalletDetailPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-600">Total Deposited</span>
-                  <TrendingUp className="w-5 h-5 text-teal-600" />
+                  <TrendingUp className="w-5 h-5 text-pink-600" />
                 </div>
-                <p className="text-2xl font-bold text-teal-600">{formatCurrency(totalDeposited)}</p>
+                <p className="text-2xl font-bold text-pink-600">{formatCurrency(totalDeposited)}</p>
               </CardContent>
             </Card>
 
@@ -183,9 +183,9 @@ export default function WalletDetailPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-600">Total Withdrawn</span>
-                  <TrendingDown className="w-5 h-5 text-coral-600" />
+                  <TrendingDown className="w-5 h-5 text-rose-500" />
                 </div>
-                <p className="text-2xl font-bold text-coral-600">{formatCurrency(totalWithdrawn)}</p>
+                <p className="text-2xl font-bold text-rose-500">{formatCurrency(totalWithdrawn)}</p>
               </CardContent>
             </Card>
 
@@ -194,7 +194,7 @@ export default function WalletDetailPage() {
                 <div className="text-center">
                   <QrCode className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                   <p className="text-sm font-semibold text-gray-700 mb-2">Share Code</p>
-                  <p className="text-lg font-mono font-bold text-teal-600 bg-teal-50 px-4 py-2 rounded-lg">
+                  <p className="text-lg font-mono font-bold text-pink-600 bg-pink-50 px-4 py-2 rounded-lg">
                     {wallet.shareableCode}
                   </p>
                 </div>
@@ -219,19 +219,19 @@ export default function WalletDetailPage() {
                   <div 
                     key={tx.id}
                     className={`flex items-center justify-between p-4 rounded-xl ${
-                      tx.type === 'deposit' ? 'bg-teal-50' : 'bg-coral-50'
+                      tx.type === 'deposit' ? 'bg-pink-50' : 'bg-rose-50'
                     }`}
                   >
                     <div className="flex items-center space-x-4">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        tx.type === 'deposit' ? 'bg-teal-100' : 'bg-coral-100'
+                        tx.type === 'deposit' ? 'bg-pink-100' : 'bg-rose-100'
                       }`}>
                         {tx.type === 'deposit' ? (
                           <TrendingUp className={`w-5 h-5 ${
-                            tx.type === 'deposit' ? 'text-teal-600' : 'text-coral-600'
+                            tx.type === 'deposit' ? 'text-pink-600' : 'text-rose-500'
                           }`} />
                         ) : (
-                          <TrendingDown className="w-5 h-5 text-coral-600" />
+                          <TrendingDown className="w-5 h-5 text-rose-500" />
                         )}
                       </div>
                       <div>
@@ -248,7 +248,7 @@ export default function WalletDetailPage() {
                       </div>
                     </div>
                     <span className={`text-lg font-bold ${
-                      tx.type === 'deposit' ? 'text-teal-600' : 'text-coral-600'
+                      tx.type === 'deposit' ? 'text-pink-600' : 'text-rose-500'
                     }`}>
                       {tx.type === 'deposit' ? '+' : '-'}{formatCurrency(tx.amount)}
                     </span>

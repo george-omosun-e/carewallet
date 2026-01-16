@@ -51,13 +51,13 @@ export default function CreateWalletPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-coral-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
       <Navigation />
       
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link 
           href="/dashboard"
-          className="inline-flex items-center text-gray-600 hover:text-teal-600 mb-6 transition-colors"
+          className="inline-flex items-center text-gray-600 hover:text-pink-600 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Dashboard
@@ -94,7 +94,7 @@ export default function CreateWalletPage() {
                   Description (Optional)
                 </label>
                 <textarea
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-400 focus:ring-4 focus:ring-teal-100 outline-none transition-all duration-200 min-h-[120px]"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all duration-200 min-h-[120px]"
                   placeholder="Share why you're raising funds and how it will help..."
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -117,12 +117,12 @@ export default function CreateWalletPage() {
                 onChange={(e) => setFormData({ ...formData, beneficiaryEmail: e.target.value })}
               />
 
-              <div className="bg-teal-50 border border-teal-200 rounded-xl p-4">
+              <div className="bg-pink-50 border border-pink-200 rounded-xl p-4">
                 <div className="flex items-start space-x-3">
-                  <Heart className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
-                  <div className="text-sm text-teal-900">
+                  <Heart className="w-5 h-5 text-pink-600 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm text-pink-900">
                     <p className="font-semibold mb-1">Setting a beneficiary</p>
-                    <p className="text-teal-700">
+                    <p className="text-pink-700">
                       The beneficiary will receive an OTP to confirm their role. They&apos;ll be able to spend from this wallet at verified pharmacies. You can set this up later if you prefer.
                     </p>
                   </div>

@@ -70,7 +70,7 @@ export default function PublicWalletPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-gray-600">Loading wallet...</p>
         </div>
       </div>
@@ -93,7 +93,7 @@ export default function PublicWalletPage() {
 
   if (showSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 via-white to-coral-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-white to-rose-50">
         <Card className="max-w-md animate-scale-in">
           <CardContent className="text-center py-12">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -113,13 +113,13 @@ export default function PublicWalletPage() {
   const progress = wallet.fundingGoal ? (wallet.balance / wallet.fundingGoal) * 100 : 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-coral-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
       <Navigation />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Card className="overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-teal-500 to-coral-500 px-8 py-12 text-white">
+          <div className="bg-gradient-to-r from-pink-500 to-rose-500 px-8 py-12 text-white">
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-start space-x-4">
                 <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
@@ -127,7 +127,7 @@ export default function PublicWalletPage() {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold mb-2">{wallet.walletName}</h1>
-                  <p className="text-teal-50">Created by {wallet.creator?.fullName}</p>
+                  <p className="text-pink-50">Created by {wallet.creator?.fullName}</p>
                 </div>
               </div>
             </div>
@@ -156,7 +156,7 @@ export default function PublicWalletPage() {
               {wallet.fundingGoal && (
                 <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-teal-500 to-coral-500 transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-pink-500 to-rose-500 transition-all duration-500"
                     style={{ width: `${Math.min(progress, 100)}%` }}
                   ></div>
                 </div>
@@ -177,17 +177,17 @@ export default function PublicWalletPage() {
                 {transactions.length > 0 && (
                   <div>
                     <h3 className="font-bold text-lg text-gray-900 mb-4 flex items-center">
-                      <Users className="w-5 h-5 mr-2 text-teal-600" />
+                      <Users className="w-5 h-5 mr-2 text-pink-600" />
                       Recent Contributors
                     </h3>
                     <div className="space-y-3">
                       {transactions.map((tx) => (
                         <div 
                           key={tx.id}
-                          className="flex items-center justify-between p-4 bg-teal-50 rounded-xl"
+                          className="flex items-center justify-between p-4 bg-pink-50 rounded-xl"
                         >
                           <div className="flex items-center space-x-3">
-                            <Heart className="w-5 h-5 text-teal-600" fill="currentColor" />
+                            <Heart className="w-5 h-5 text-pink-600" fill="currentColor" />
                             <div>
                               <p className="font-semibold text-gray-900">
                                 {tx.contributorEmail?.split('@')[0] || 'Anonymous'}
@@ -197,7 +197,7 @@ export default function PublicWalletPage() {
                               )}
                             </div>
                           </div>
-                          <span className="font-bold text-teal-600">{formatCurrency(tx.amount)}</span>
+                          <span className="font-bold text-pink-600">{formatCurrency(tx.amount)}</span>
                         </div>
                       ))}
                     </div>
@@ -229,7 +229,7 @@ export default function PublicWalletPage() {
                     Leave a message (Optional)
                   </label>
                   <textarea
-                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-400 focus:ring-4 focus:ring-teal-100 outline-none transition-all duration-200"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all duration-200"
                     placeholder="Add words of encouragement..."
                     rows={3}
                     value={contributorMessage}

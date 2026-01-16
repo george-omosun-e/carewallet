@@ -50,14 +50,14 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-teal-50 via-white to-coral-50">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-pink-50 via-white to-rose-50">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center justify-center space-x-2 mb-6">
-            <div className="bg-gradient-to-br from-teal-500 to-coral-500 p-2 rounded-xl">
+            <div className="bg-gradient-to-br from-pink-500 to-rose-500 p-2 rounded-xl">
               <Heart className="w-8 h-8 text-white" fill="white" />
             </div>
-            <span className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-coral-600 bg-clip-text text-transparent">
+            <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
               CareWallet
             </span>
           </Link>
@@ -117,7 +117,7 @@ export default function SignupPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
-              <Link href="/auth/login" className="text-teal-600 font-semibold hover:text-teal-700">
+              <Link href="/auth/login" className="text-pink-600 font-semibold hover:text-pink-700">
                 Sign in
               </Link>
             </p>
@@ -126,11 +126,11 @@ export default function SignupPage() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           By signing up, you agree to our{' '}
-          <Link href="#" className="text-teal-600 hover:text-teal-700">
+          <Link href="#" className="text-pink-600 hover:text-pink-700">
             Terms
           </Link>{' '}
           and{' '}
-          <Link href="#" className="text-teal-600 hover:text-teal-700">
+          <Link href="#" className="text-pink-600 hover:text-pink-700">
             Privacy Policy
           </Link>
         </p>
