@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd missing type exports and utility functions for build\n\n- Add ApiResponse, SignupForm, LoginForm, CreateWalletForm, DepositForm,\n  WithdrawalForm, and WalletStats interfaces to lib/types.ts\n- Add pharmacy field to Transaction interface\n- Add status field to Pharmacy interface\n- Add generateShortCode and sleep utility functions to lib/utils.ts\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nUpdate UI to pink gradient theme and add human imagery\n\n- Replace teal/coral color scheme with pink/rose gradients throughout\n- Add pink and rose color palettes to Tailwind config\n- Update all pages, components, and global styles with new colors\n- Add Pexels image to landing page hero and features sections\n- Configure next.config.js to allow images from pexels.com\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(curl:*)",
+      "Bash(jq:*)",
+      "Bash(docker compose logs:*)",
+      "Bash(railway add:*)",
+      "Bash(railway logs:*)",
+      "Bash(railway link:*)",
+      "Bash(migrate:*)"
+    ]
+  }
+}

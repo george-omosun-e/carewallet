@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"embed"
 	"log"
 	"net/http"
 	"os"
@@ -17,7 +18,32 @@ import (
 	"github.com/carewallet/backend/internal/utils"
 	"github.com/carewallet/backend/pkg/database"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 )
+
+//go:embed migrations/*.sql
+var migrationsFS embed.FS
+
+func runMigrations(databaseURL string) error {
+	d, err := iofs.New(migrationsFS, "migrations")
+	if err != nil {
+		return err
+	}
+
+	m, err := migrate.NewWithSourceInstance("iofs", d, databaseURL)
+	if err != nil {
+		return err
+	}
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		return err
+	}
+
+	log.Println("Database migrations completed")
+	return nil
+}
 
 func main() {
 	// Load configuration
@@ -26,6 +52,11 @@ func main() {
 	// Set Gin mode
 	if cfg.IsProduction() {
 		gin.SetMode(gin.ReleaseMode)
+	}
+
+	// Run database migrations
+	if err := runMigrations(cfg.DatabaseURL); err != nil {
+		log.Printf("Warning: Migration error: %v", err)
 	}
 
 	// Initialize database
