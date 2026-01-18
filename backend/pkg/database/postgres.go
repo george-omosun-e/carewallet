@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -13,18 +14,21 @@ type PostgresDB struct {
 }
 
 func NewPostgresDB(databaseURL string) (*PostgresDB, error) {
+	log.Printf("Connecting to database...")
+
 	config, err := pgxpool.ParseConfig(databaseURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse database URL: %w", err)
 	}
 
-	config.MaxConns = 25
-	config.MinConns = 5
+	config.MaxConns = 10
+	config.MinConns = 0
 	config.MaxConnLifetime = time.Hour
 	config.MaxConnIdleTime = 30 * time.Minute
 	config.HealthCheckPeriod = time.Minute
+	config.ConnConfig.ConnectTimeout = 30 * time.Second
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	pool, err := pgxpool.NewWithConfig(ctx, config)
