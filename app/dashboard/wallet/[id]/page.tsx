@@ -34,7 +34,7 @@ export default function WalletDetailPage() {
         apiClient.getTransactions(walletId),
       ])
       setWallet(walletData)
-      setTransactions(txData)
+      setTransactions(txData || [])
     } catch (error) {
       console.error('Failed to load wallet:', error)
     } finally {
@@ -88,8 +88,9 @@ export default function WalletDetailPage() {
     )
   }
 
-  const deposits = transactions.filter(t => t.type === 'deposit')
-  const withdrawals = transactions.filter(t => t.type === 'withdrawal')
+  const txList = Array.isArray(transactions) ? transactions : []
+  const deposits = txList.filter(t => t.type === 'deposit')
+  const withdrawals = txList.filter(t => t.type === 'withdrawal')
   const totalDeposited = deposits.reduce((sum, t) => sum + t.amount, 0)
   const totalWithdrawn = withdrawals.reduce((sum, t) => sum + t.amount, 0)
 
@@ -209,13 +210,13 @@ export default function WalletDetailPage() {
             <CardTitle>Transaction History</CardTitle>
           </CardHeader>
           <CardContent>
-            {transactions.length === 0 ? (
+            {txList.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
                 <p>No transactions yet</p>
               </div>
             ) : (
               <div className="space-y-3">
-                {transactions.map((tx) => (
+                {txList.map((tx) => (
                   <div 
                     key={tx.id}
                     className={`flex items-center justify-between p-4 rounded-xl ${

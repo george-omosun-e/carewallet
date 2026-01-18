@@ -36,7 +36,7 @@ export default function PublicWalletPage() {
       const walletData = await apiClient.getWalletByCode(code)
       setWallet(walletData)
       const txData = await apiClient.getTransactions(walletData.id)
-      setTransactions(txData.filter(t => t.type === 'deposit').slice(0, 3))
+      setTransactions((txData || []).filter(t => t.type === 'deposit').slice(0, 3))
     } catch (error) {
       console.error('Failed to load wallet:', error)
     } finally {
