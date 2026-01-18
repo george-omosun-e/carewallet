@@ -54,6 +54,11 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	// Run database migrations
+	if err := runMigrations(cfg.DatabaseURL); err != nil {
+		log.Printf("Warning: Migration error: %v", err)
+	}
+
 	// Initialize database
 	db, err := database.NewPostgresDB(cfg.DatabaseURL)
 	if err != nil {
