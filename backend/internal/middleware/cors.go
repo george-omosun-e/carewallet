@@ -36,11 +36,6 @@ func CORS(allowedOrigins []string) gin.HandlerFunc {
 			}
 		}
 
-		// Allow any origin if it looks like a valid URL (temporary debug)
-		if !allowed && origin != "" {
-			allowed = true
-		}
-
 		if allowed && origin != "" {
 			c.Header("Access-Control-Allow-Origin", origin)
 		} else if len(allowedOrigins) > 0 {
