@@ -19,8 +19,8 @@ func NewPharmacyRepository(db *database.PostgresDB) PharmacyRepository {
 
 func (r *pharmacyRepository) Create(ctx context.Context, pharmacy *domain.Pharmacy) error {
 	query := `
-		INSERT INTO pharmacies (name, short_code, registration_number, address, phone, email, status)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO pharmacies (name, short_code, registration_number, address, phone, email, password_hash, status)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING id, created_at, updated_at`
 
 	err := r.db.Pool.QueryRow(ctx, query,
@@ -30,6 +30,7 @@ func (r *pharmacyRepository) Create(ctx context.Context, pharmacy *domain.Pharma
 		pharmacy.Address,
 		pharmacy.Phone,
 		pharmacy.Email,
+		pharmacy.PasswordHash,
 		pharmacy.Status,
 	).Scan(&pharmacy.ID, &pharmacy.CreatedAt, &pharmacy.UpdatedAt)
 
@@ -38,7 +39,7 @@ func (r *pharmacyRepository) Create(ctx context.Context, pharmacy *domain.Pharma
 
 func (r *pharmacyRepository) GetByID(ctx context.Context, id string) (*domain.Pharmacy, error) {
 	query := `
-		SELECT id, name, short_code, registration_number, address, phone, email, status, created_at, updated_at
+		SELECT id, name, short_code, registration_number, COALESCE(address, ''), COALESCE(phone, ''), COALESCE(email, ''), COALESCE(password_hash, ''), status, created_at, updated_at
 		FROM pharmacies
 		WHERE id = $1`
 
@@ -51,6 +52,7 @@ func (r *pharmacyRepository) GetByID(ctx context.Context, id string) (*domain.Ph
 		&pharmacy.Address,
 		&pharmacy.Phone,
 		&pharmacy.Email,
+		&pharmacy.PasswordHash,
 		&pharmacy.Status,
 		&pharmacy.CreatedAt,
 		&pharmacy.UpdatedAt,
@@ -68,7 +70,7 @@ func (r *pharmacyRepository) GetByID(ctx context.Context, id string) (*domain.Ph
 
 func (r *pharmacyRepository) GetByShortCode(ctx context.Context, code string) (*domain.Pharmacy, error) {
 	query := `
-		SELECT id, name, short_code, registration_number, address, phone, email, status, created_at, updated_at
+		SELECT id, name, short_code, registration_number, COALESCE(address, ''), COALESCE(phone, ''), COALESCE(email, ''), COALESCE(password_hash, ''), status, created_at, updated_at
 		FROM pharmacies
 		WHERE short_code = $1`
 
@@ -81,6 +83,7 @@ func (r *pharmacyRepository) GetByShortCode(ctx context.Context, code string) (*
 		&pharmacy.Address,
 		&pharmacy.Phone,
 		&pharmacy.Email,
+		&pharmacy.PasswordHash,
 		&pharmacy.Status,
 		&pharmacy.CreatedAt,
 		&pharmacy.UpdatedAt,
@@ -98,9 +101,8 @@ func (r *pharmacyRepository) GetByShortCode(ctx context.Context, code string) (*
 
 func (r *pharmacyRepository) GetAll(ctx context.Context) ([]*domain.Pharmacy, error) {
 	query := `
-		SELECT id, name, short_code, registration_number, address, phone, email, status, created_at, updated_at
+		SELECT id, name, short_code, registration_number, COALESCE(address, ''), COALESCE(phone, ''), COALESCE(email, ''), COALESCE(password_hash, ''), status, created_at, updated_at
 		FROM pharmacies
-		WHERE status = 'active'
 		ORDER BY name`
 
 	rows, err := r.db.Pool.Query(ctx, query)
@@ -120,6 +122,7 @@ func (r *pharmacyRepository) GetAll(ctx context.Context) ([]*domain.Pharmacy, er
 			&pharmacy.Address,
 			&pharmacy.Phone,
 			&pharmacy.Email,
+			&pharmacy.PasswordHash,
 			&pharmacy.Status,
 			&pharmacy.CreatedAt,
 			&pharmacy.UpdatedAt,
@@ -136,8 +139,8 @@ func (r *pharmacyRepository) GetAll(ctx context.Context) ([]*domain.Pharmacy, er
 func (r *pharmacyRepository) Update(ctx context.Context, pharmacy *domain.Pharmacy) error {
 	query := `
 		UPDATE pharmacies
-		SET name = $1, short_code = $2, registration_number = $3, address = $4, phone = $5, email = $6, status = $7, updated_at = NOW()
-		WHERE id = $8
+		SET name = $1, short_code = $2, registration_number = $3, address = $4, phone = $5, email = $6, password_hash = $7, status = $8, updated_at = NOW()
+		WHERE id = $9
 		RETURNING updated_at`
 
 	err := r.db.Pool.QueryRow(ctx, query,
@@ -147,6 +150,7 @@ func (r *pharmacyRepository) Update(ctx context.Context, pharmacy *domain.Pharma
 		pharmacy.Address,
 		pharmacy.Phone,
 		pharmacy.Email,
+		pharmacy.PasswordHash,
 		pharmacy.Status,
 		pharmacy.ID,
 	).Scan(&pharmacy.UpdatedAt)
