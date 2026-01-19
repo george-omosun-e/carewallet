@@ -24,6 +24,11 @@ var (
 	ErrPharmacyNotFound = errors.New("pharmacy not found")
 	ErrPharmacyInactive = errors.New("pharmacy is not active")
 
+	// Payment errors
+	ErrPaymentNotFound     = errors.New("payment not found")
+	ErrPaymentAlreadyVerified = errors.New("payment already verified")
+	ErrPaymentFailed       = errors.New("payment failed")
+
 	// OTP errors
 	ErrOTPNotFound   = errors.New("OTP not found")
 	ErrOTPExpired    = errors.New("OTP has expired")

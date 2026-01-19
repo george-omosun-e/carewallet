@@ -40,8 +40,19 @@ export default function SignupPage() {
 
     setIsLoading(true)
     try {
-      await apiClient.signup(formData.email, formData.password, formData.fullName)
-      router.push('/dashboard')
+      const user = await apiClient.signup(formData.email, formData.password, formData.fullName)
+      // If user is not verified, redirect to verification page
+      if (!user.verified) {
+        // Send verification OTP
+        try {
+          await apiClient.sendOTP(formData.email, 'email_verification')
+        } catch (otpError) {
+          console.error('Failed to send verification OTP:', otpError)
+        }
+        router.push(`/auth/verify-email?email=${encodeURIComponent(formData.email)}`)
+      } else {
+        router.push('/dashboard')
+      }
     } catch (error: any) {
       setErrors({ general: error.message || 'An error occurred' })
     } finally {

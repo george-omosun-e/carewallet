@@ -124,11 +124,16 @@ func (s *authService) IsTokenBlacklisted(ctx context.Context, jti string) (bool,
 }
 
 func userToResponse(user *domain.User) dto.UserResponse {
+	role := string(user.Role)
+	if role == "" {
+		role = "user"
+	}
 	return dto.UserResponse{
 		ID:       user.ID,
 		Email:    user.Email,
 		FullName: user.FullName,
 		Phone:    user.Phone,
 		Verified: user.Verified,
+		Role:     role,
 	}
 }

@@ -1,13 +1,28 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Heart, Menu, X, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
+import { apiClient } from '@/lib/api/client'
 
 export default function Navigation() {
   const pathname = usePathname()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    try {
+      await apiClient.logout()
+      router.push('/')
+    } catch (error) {
+      console.error('Logout failed:', error)
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
 
   const isDashboard = pathname.startsWith('/dashboard')
 
@@ -43,9 +58,19 @@ export default function Navigation() {
               >
                 Settings
               </Link>
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-pink-600">
-                <User className="w-5 h-5" />
-              </button>
+              <div className="flex items-center space-x-3">
+                <Link href="/settings" className="flex items-center text-gray-600 hover:text-pink-600">
+                  <User className="w-5 h-5" />
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className="flex items-center text-gray-600 hover:text-red-600 transition-colors disabled:opacity-50"
+                  title="Logout"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>

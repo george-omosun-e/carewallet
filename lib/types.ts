@@ -44,7 +44,10 @@ export interface Pharmacy {
   name: string
   shortCode: string
   registrationNumber: string
-  status?: 'active' | 'inactive'
+  address?: string
+  phone?: string
+  email?: string
+  status?: 'active' | 'inactive' | 'pending'
 }
 
 export interface CreateWalletInput {
@@ -114,4 +117,83 @@ export interface WalletStats {
   contributorCount: number
   averageDeposit: number
   recentTransactions: Transaction[]
+}
+
+// Payment types
+export interface PaymentInitResponse {
+  reference: string
+  accessCode: string
+  authorizationUrl: string
+}
+
+export interface PaymentVerifyResponse {
+  status: 'success' | 'failed' | 'pending'
+  amount: number
+  transactionId: string
+}
+
+// Pharmacy Portal types
+export interface PharmacyAuth {
+  token: string
+  pharmacy: Pharmacy
+}
+
+export interface PharmacyLoginForm {
+  shortCode: string
+  password: string
+}
+
+export interface WalletLookup {
+  walletId: string
+  walletName: string
+  balance: number
+  beneficiaryName: string
+}
+
+export interface WithdrawalInitRequest {
+  walletCode: string
+  amount: number
+}
+
+export interface WithdrawalInitResponse {
+  withdrawalId: string
+  walletName: string
+  beneficiaryName: string
+  amount: number
+  otpSentTo: string
+}
+
+export interface WithdrawalCompleteRequest {
+  withdrawalId: string
+  otpCode: string
+}
+
+// Admin types
+export interface AdminPharmacyFilter {
+  status?: 'active' | 'inactive' | 'pending'
+  search?: string
+  page?: number
+  limit?: number
+}
+
+export interface AdminPharmacy extends Pharmacy {
+  totalTransactions: number
+  totalWithdrawn: number
+  createdAt: string
+  password?: string
+}
+
+export interface CreatePharmacyInput {
+  name: string
+  shortCode: string
+  registrationNumber: string
+  address?: string
+  phone?: string
+  email?: string
+  password: string
+}
+
+// User with role
+export interface UserWithRole extends User {
+  role: 'user' | 'pharmacy' | 'admin'
 }

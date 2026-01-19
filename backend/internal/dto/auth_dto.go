@@ -23,4 +23,5 @@ type UserResponse struct {
 	FullName string `json:"full_name"`
 	Phone    string `json:"phone,omitempty"`
 	Verified bool   `json:"verified"`
+	Role     string `json:"role"`
 }

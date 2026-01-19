@@ -78,6 +78,7 @@ func main() {
 	pharmacyRepo := repository.NewPharmacyRepository(db)
 	otpRepo := repository.NewOTPRepository(db)
 	tokenBlacklistRepo := repository.NewTokenBlacklistRepository(db)
+	paymentRepo := repository.NewPaymentRepository(db)
 
 	// Initialize services
 	emailService := service.NewMockEmailService()
@@ -85,12 +86,18 @@ func main() {
 	authService := service.NewAuthService(userRepo, tokenBlacklistRepo, jwtManager, cfg)
 	walletService := service.NewWalletService(walletRepo)
 	transactionService := service.NewTransactionService(transactionRepo, walletRepo, pharmacyRepo, otpService, cfg)
+	paymentService := service.NewPaymentService(paymentRepo, walletRepo, transactionRepo, cfg.PaystackSecretKey)
+	adminService := service.NewAdminService(pharmacyRepo, transactionRepo)
+	pharmacyAuthService := service.NewPharmacyAuthService(pharmacyRepo, jwtManager, cfg)
 
 	// Initialize handlers
 	authHandler := handler.NewAuthHandler(authService)
 	walletHandler := handler.NewWalletHandler(walletService)
 	transactionHandler := handler.NewTransactionHandler(transactionService, otpService)
 	otpHandler := handler.NewOTPHandler(otpService)
+	paymentHandler := handler.NewPaymentHandler(paymentService)
+	adminHandler := handler.NewAdminHandler(adminService)
+	pharmacyAuthHandler := handler.NewPharmacyAuthHandler(pharmacyAuthService, walletRepo, userRepo, otpService, transactionService)
 
 	// Initialize middleware
 	authMiddleware := middleware.NewAuthMiddleware(jwtManager, authService)
@@ -157,6 +164,43 @@ func main() {
 		{
 			otp.POST("/send", otpHandler.Send)
 			otp.POST("/verify", otpHandler.Verify)
+		}
+
+		// Payment routes
+		payments := api.Group("/payments")
+		{
+			payments.POST("/initialize", paymentHandler.Initialize)
+			payments.GET("/verify/:reference", paymentHandler.Verify)
+		}
+
+		// Pharmacy portal routes
+		pharmacy := api.Group("/pharmacy")
+		{
+			pharmacy.POST("/auth/login", pharmacyAuthHandler.Login)
+
+			// Protected pharmacy routes
+			pharmacyProtected := pharmacy.Group("")
+			pharmacyProtected.Use(authMiddleware.RequireAuth())
+			pharmacyProtected.GET("/auth/me", pharmacyAuthHandler.GetCurrentPharmacy)
+			pharmacyProtected.GET("/wallets/:code", pharmacyAuthHandler.LookupWallet)
+			pharmacyProtected.POST("/withdrawals/initiate", pharmacyAuthHandler.InitiateWithdrawal)
+			pharmacyProtected.POST("/withdrawals/complete", pharmacyAuthHandler.CompleteWithdrawal)
+		}
+
+		// Admin routes
+		admin := api.Group("/admin")
+		admin.Use(authMiddleware.RequireAuth())
+		// Note: In production, add admin role check middleware
+		{
+			admin.GET("/dashboard/stats", adminHandler.GetDashboardStats)
+			admin.GET("/pharmacies", adminHandler.GetPharmacies)
+			admin.GET("/pharmacies/:id", adminHandler.GetPharmacy)
+			admin.POST("/pharmacies", adminHandler.CreatePharmacy)
+			admin.PUT("/pharmacies/:id", adminHandler.UpdatePharmacy)
+			admin.PUT("/pharmacies/:id/approve", adminHandler.ApprovePharmacy)
+			admin.PUT("/pharmacies/:id/suspend", adminHandler.SuspendPharmacy)
+			admin.PUT("/pharmacies/:id/reactivate", adminHandler.ReactivatePharmacy)
+			admin.DELETE("/pharmacies/:id", adminHandler.DeletePharmacy)
 		}
 	}
 

@@ -17,6 +17,7 @@ type Config struct {
 	RateLimitRPS          int
 	OTPExpirationMinutes  int
 	PlatformFeePercentage float64
+	PaystackSecretKey     string
 }
 
 func Load() *Config {
@@ -30,6 +31,7 @@ func Load() *Config {
 		RateLimitRPS:          getEnvAsInt("RATE_LIMIT_RPS", 100),
 		OTPExpirationMinutes:  getEnvAsInt("OTP_EXPIRATION_MINUTES", 10),
 		PlatformFeePercentage: getEnvAsFloat("PLATFORM_FEE_PERCENTAGE", 0.04),
+		PaystackSecretKey:     getEnv("PAYSTACK_SECRET_KEY", ""),
 	}
 }
 

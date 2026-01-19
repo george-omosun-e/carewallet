@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { Heart, Users, TrendingUp, Check } from 'lucide-react'
+import { Heart, Users, TrendingUp, Check, AlertCircle } from 'lucide-react'
 import Navigation from '@/components/layout/Navigation'
 import { Card, CardContent } from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
@@ -10,6 +10,7 @@ import Input from '@/components/ui/Input'
 import { apiClient } from '@/lib/api/client'
 import { Wallet, Transaction } from '@/lib/types'
 import { formatCurrency, formatDate } from '@/lib/utils'
+import { initializePayment, toSmallestUnit, getPaystackPublicKey } from '@/lib/paystack'
 
 export default function PublicWalletPage() {
   const params = useParams()
@@ -44,24 +45,68 @@ export default function PublicWalletPage() {
     }
   }
 
+  const [paymentError, setPaymentError] = useState<string | null>(null)
+
   const handleDeposit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!wallet) return
 
+    const amount = parseFloat(depositAmount)
+    if (isNaN(amount) || amount < 10) {
+      setPaymentError('Please enter a valid amount (minimum R10)')
+      return
+    }
+
+    if (!contributorEmail) {
+      setPaymentError('Email is required for payment')
+      return
+    }
+
     setIsProcessing(true)
+    setPaymentError(null)
+
     try {
-      await apiClient.deposit(wallet.id, {
-        amount: parseFloat(depositAmount),
-        contributorEmail: contributorEmail || undefined,
-        contributorMessage: contributorMessage || undefined,
+      // Initialize payment with backend
+      const { reference } = await apiClient.initializePayment(
+        wallet.id,
+        amount,
+        contributorEmail,
+        contributorMessage || undefined
+      )
+
+      // Open Paystack popup
+      await initializePayment({
+        publicKey: getPaystackPublicKey(),
+        email: contributorEmail,
+        amount: toSmallestUnit(amount),
+        currency: 'ZAR',
+        reference,
+        metadata: {
+          walletId: wallet.id,
+          walletName: wallet.walletName,
+          message: contributorMessage,
+        },
+        onSuccess: async (response) => {
+          try {
+            // Verify payment with backend
+            await apiClient.verifyPayment(response.reference)
+            setShowSuccess(true)
+            setTimeout(() => {
+              window.location.reload()
+            }, 3000)
+          } catch (error) {
+            setPaymentError('Payment verification failed. Please contact support.')
+          } finally {
+            setIsProcessing(false)
+          }
+        },
+        onCancel: () => {
+          setPaymentError('Payment was cancelled')
+          setIsProcessing(false)
+        },
       })
-      setShowSuccess(true)
-      setTimeout(() => {
-        window.location.reload()
-      }, 3000)
-    } catch (error) {
-      alert('Payment failed. Please try again.')
-    } finally {
+    } catch (error: any) {
+      setPaymentError(error.message || 'Failed to initialize payment. Please try again.')
       setIsProcessing(false)
     }
   }
@@ -206,6 +251,13 @@ export default function PublicWalletPage() {
               </>
             ) : (
               <form onSubmit={handleDeposit} className="space-y-6">
+                {paymentError && (
+                  <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm flex items-start">
+                    <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                    <span>{paymentError}</span>
+                  </div>
+                )}
+
                 <Input
                   label="Contribution Amount (ZAR)"
                   type="number"
@@ -217,11 +269,12 @@ export default function PublicWalletPage() {
                 />
 
                 <Input
-                  label="Your Email (Optional, for receipt)"
+                  label="Your Email (for payment receipt)"
                   type="email"
                   placeholder="you@example.com"
                   value={contributorEmail}
                   onChange={(e) => setContributorEmail(e.target.value)}
+                  required
                 />
 
                 <div>

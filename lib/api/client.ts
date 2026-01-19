@@ -1,4 +1,4 @@
-import { User, Wallet, Transaction, CreateWalletInput, DepositInput, WithdrawalInput } from '../types'
+import { User, Wallet, Transaction, CreateWalletInput, DepositInput, WithdrawalInput, PaymentInitResponse, PaymentVerifyResponse } from '../types'
 import { mockAPI } from './mockAPI'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
@@ -288,6 +288,69 @@ class APIClient {
       body: JSON.stringify({ email, code, purpose }),
     })
     return result.valid
+  }
+
+  // User Profile
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    if (this.useMock) return
+    return this.request<void>('/auth/password', {
+      method: 'PUT',
+      body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+    })
+  }
+
+  async updateProfile(data: { fullName?: string; phone?: string }): Promise<User> {
+    if (this.useMock) throw new Error('Not implemented in mock')
+    return this.request<User>('/users/profile', {
+      method: 'PUT',
+      body: JSON.stringify(transformKeysToSnake(data)),
+    })
+  }
+
+  async verifyEmail(code: string): Promise<void> {
+    if (this.useMock) return
+    return this.request<void>('/auth/verify-email', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    })
+  }
+
+  async resendVerificationEmail(): Promise<void> {
+    if (this.useMock) return
+    return this.request<void>('/auth/resend-verification', {
+      method: 'POST',
+    })
+  }
+
+  // Payments
+  async initializePayment(walletId: string, amount: number, email: string, message?: string): Promise<PaymentInitResponse> {
+    if (this.useMock) {
+      return {
+        reference: `CW_${Date.now()}_mock`,
+        accessCode: 'mock_access_code',
+        authorizationUrl: '',
+      }
+    }
+    return this.request<PaymentInitResponse>('/payments/initialize', {
+      method: 'POST',
+      body: JSON.stringify({
+        wallet_id: walletId,
+        amount,
+        email,
+        message,
+      }),
+    })
+  }
+
+  async verifyPayment(reference: string): Promise<PaymentVerifyResponse> {
+    if (this.useMock) {
+      return {
+        status: 'success',
+        amount: 0,
+        transactionId: 'mock_tx_id',
+      }
+    }
+    return this.request<PaymentVerifyResponse>(`/payments/verify/${reference}`)
   }
 }
 

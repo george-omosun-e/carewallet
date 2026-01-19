@@ -18,9 +18,12 @@ func NewUserRepository(db *database.PostgresDB) UserRepository {
 }
 
 func (r *userRepository) Create(ctx context.Context, user *domain.User) error {
+	if user.Role == "" {
+		user.Role = domain.UserRoleUser
+	}
 	query := `
-		INSERT INTO users (email, full_name, phone, password_hash, verified)
-		VALUES ($1, $2, $3, $4, $5)
+		INSERT INTO users (email, full_name, phone, password_hash, verified, role)
+		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING id, created_at, updated_at`
 
 	err := r.db.Pool.QueryRow(ctx, query,
@@ -29,6 +32,7 @@ func (r *userRepository) Create(ctx context.Context, user *domain.User) error {
 		user.Phone,
 		user.PasswordHash,
 		user.Verified,
+		user.Role,
 	).Scan(&user.ID, &user.CreatedAt, &user.UpdatedAt)
 
 	if err != nil {
@@ -43,7 +47,7 @@ func (r *userRepository) Create(ctx context.Context, user *domain.User) error {
 
 func (r *userRepository) GetByID(ctx context.Context, id string) (*domain.User, error) {
 	query := `
-		SELECT id, email, full_name, phone, password_hash, verified, created_at, updated_at
+		SELECT id, email, full_name, phone, password_hash, verified, COALESCE(role, 'user'), created_at, updated_at
 		FROM users
 		WHERE id = $1`
 
@@ -55,6 +59,7 @@ func (r *userRepository) GetByID(ctx context.Context, id string) (*domain.User, 
 		&user.Phone,
 		&user.PasswordHash,
 		&user.Verified,
+		&user.Role,
 		&user.CreatedAt,
 		&user.UpdatedAt,
 	)
@@ -71,7 +76,7 @@ func (r *userRepository) GetByID(ctx context.Context, id string) (*domain.User, 
 
 func (r *userRepository) GetByEmail(ctx context.Context, email string) (*domain.User, error) {
 	query := `
-		SELECT id, email, full_name, phone, password_hash, verified, created_at, updated_at
+		SELECT id, email, full_name, phone, password_hash, verified, COALESCE(role, 'user'), created_at, updated_at
 		FROM users
 		WHERE email = $1`
 
@@ -83,6 +88,7 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (*domain.
 		&user.Phone,
 		&user.PasswordHash,
 		&user.Verified,
+		&user.Role,
 		&user.CreatedAt,
 		&user.UpdatedAt,
 	)

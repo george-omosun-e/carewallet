@@ -9,6 +9,7 @@ type PharmacyStatus string
 const (
 	PharmacyStatusActive   PharmacyStatus = "active"
 	PharmacyStatusInactive PharmacyStatus = "inactive"
+	PharmacyStatusPending  PharmacyStatus = "pending"
 )
 
 type Pharmacy struct {
@@ -19,6 +20,7 @@ type Pharmacy struct {
 	Address            string         `json:"address,omitempty"`
 	Phone              string         `json:"phone,omitempty"`
 	Email              string         `json:"email,omitempty"`
+	PasswordHash       string         `json:"-"`
 	Status             PharmacyStatus `json:"status"`
 	CreatedAt          time.Time      `json:"created_at"`
 	UpdatedAt          time.Time      `json:"updated_at"`
