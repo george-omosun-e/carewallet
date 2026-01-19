@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Heart } from 'lucide-react'
@@ -16,6 +16,28 @@ export default function LoginPage() {
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(false)
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await apiClient.getCurrentUser()
+        if (user) {
+          // Redirect based on role
+          if (user.role === 'admin') {
+            router.replace('/admin')
+          } else {
+            router.replace('/dashboard')
+          }
+        }
+      } catch {
+        // Not logged in, stay on page
+      } finally {
+        setIsCheckingAuth(false)
+      }
+    }
+    checkAuth()
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,13 +54,26 @@ export default function LoginPage() {
 
     setIsLoading(true)
     try {
-      await apiClient.login(formData.email, formData.password)
-      router.push('/dashboard')
+      const user = await apiClient.login(formData.email, formData.password)
+      // Redirect based on role
+      if (user.role === 'admin') {
+        router.push('/admin')
+      } else {
+        router.push('/dashboard')
+      }
     } catch (error: any) {
       setErrors({ general: error.message || 'Invalid email or password' })
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-white to-rose-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500"></div>
+      </div>
+    )
   }
 
   return (

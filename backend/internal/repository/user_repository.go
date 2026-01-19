@@ -47,7 +47,7 @@ func (r *userRepository) Create(ctx context.Context, user *domain.User) error {
 
 func (r *userRepository) GetByID(ctx context.Context, id string) (*domain.User, error) {
 	query := `
-		SELECT id, email, full_name, phone, password_hash, verified, COALESCE(role, 'user'), created_at, updated_at
+		SELECT id, email, full_name, COALESCE(phone, ''), password_hash, verified, COALESCE(role, 'user'), created_at, updated_at
 		FROM users
 		WHERE id = $1`
 
@@ -76,7 +76,7 @@ func (r *userRepository) GetByID(ctx context.Context, id string) (*domain.User, 
 
 func (r *userRepository) GetByEmail(ctx context.Context, email string) (*domain.User, error) {
 	query := `
-		SELECT id, email, full_name, phone, password_hash, verified, COALESCE(role, 'user'), created_at, updated_at
+		SELECT id, email, full_name, COALESCE(phone, ''), password_hash, verified, COALESCE(role, 'user'), created_at, updated_at
 		FROM users
 		WHERE email = $1`
 

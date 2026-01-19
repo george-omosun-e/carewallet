@@ -5,6 +5,7 @@ export interface User {
   phone?: string
   createdAt: string
   verified: boolean
+  role?: 'user' | 'pharmacy' | 'admin'
 }
 
 export interface Wallet {
