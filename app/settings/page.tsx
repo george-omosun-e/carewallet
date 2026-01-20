@@ -40,10 +40,17 @@ export default function SettingsPage() {
     setPasswordSuccess(false)
 
     const errors: Record<string, string> = {}
-    if (!passwordForm.currentPassword) errors.currentPassword = 'Required'
-    if (!passwordForm.newPassword) errors.newPassword = 'Required'
-    if (passwordForm.newPassword.length < 8) errors.newPassword = 'Min 8 characters'
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+    if (!passwordForm.currentPassword) {
+      errors.currentPassword = 'Required'
+    }
+    if (!passwordForm.newPassword) {
+      errors.newPassword = 'Required'
+    } else if (passwordForm.newPassword.length < 8) {
+      errors.newPassword = 'Min 8 characters'
+    }
+    if (!passwordForm.confirmPassword) {
+      errors.confirmPassword = 'Required'
+    } else if (passwordForm.newPassword !== passwordForm.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match'
     }
 
