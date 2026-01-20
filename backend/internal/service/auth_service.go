@@ -16,6 +16,7 @@ type AuthService interface {
 	Logout(ctx context.Context, jti, userID string, claims *utils.JWTClaims) error
 	GetCurrentUser(ctx context.Context, userID string) (*dto.UserResponse, error)
 	IsTokenBlacklisted(ctx context.Context, jti string) (bool, error)
+	ChangePassword(ctx context.Context, userID string, req dto.ChangePasswordRequest) error
 }
 
 type authService struct {
@@ -121,6 +122,29 @@ func (s *authService) GetCurrentUser(ctx context.Context, userID string) (*dto.U
 
 func (s *authService) IsTokenBlacklisted(ctx context.Context, jti string) (bool, error) {
 	return s.tokenBlacklistRepo.Exists(ctx, jti)
+}
+
+func (s *authService) ChangePassword(ctx context.Context, userID string, req dto.ChangePasswordRequest) error {
+	// Get user
+	user, err := s.userRepo.GetByID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	// Verify current password
+	if !utils.CheckPassword(req.CurrentPassword, user.PasswordHash) {
+		return domain.ErrInvalidCredentials
+	}
+
+	// Hash new password
+	newPasswordHash, err := utils.HashPassword(req.NewPassword)
+	if err != nil {
+		return err
+	}
+
+	// Update password
+	user.PasswordHash = newPasswordHash
+	return s.userRepo.Update(ctx, user)
 }
 
 func userToResponse(user *domain.User) dto.UserResponse {

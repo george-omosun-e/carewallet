@@ -2,21 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { Heart, Users, TrendingUp, Check, AlertCircle } from 'lucide-react'
+import Link from 'next/link'
+import { Heart, Users, Check, AlertCircle, Wallet } from 'lucide-react'
 import Navigation from '@/components/layout/Navigation'
-import { Card, CardContent } from '@/components/ui/Card'
-import Button from '@/components/ui/Button'
-import Input from '@/components/ui/Input'
 import { apiClient } from '@/lib/api/client'
-import { Wallet, Transaction } from '@/lib/types'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { Wallet as WalletType, Transaction } from '@/lib/types'
+import { formatCurrency } from '@/lib/utils'
 import { initializePayment, toSmallestUnit, getPaystackPublicKey } from '@/lib/paystack'
 
 export default function PublicWalletPage() {
   const params = useParams()
   const code = params.code as string
 
-  const [wallet, setWallet] = useState<Wallet | null>(null)
+  const [wallet, setWallet] = useState<WalletType | null>(null)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [showDepositForm, setShowDepositForm] = useState(false)
@@ -25,6 +23,7 @@ export default function PublicWalletPage() {
   const [contributorMessage, setContributorMessage] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
 
   useEffect(() => {
     if (code) {
@@ -45,8 +44,6 @@ export default function PublicWalletPage() {
     }
   }
 
-  const [paymentError, setPaymentError] = useState<string | null>(null)
-
   const handleDeposit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!wallet) return
@@ -66,7 +63,6 @@ export default function PublicWalletPage() {
     setPaymentError(null)
 
     try {
-      // Initialize payment with backend
       const { reference } = await apiClient.initializePayment(
         wallet.id,
         amount,
@@ -74,7 +70,6 @@ export default function PublicWalletPage() {
         contributorMessage || undefined
       )
 
-      // Open Paystack popup
       await initializePayment({
         publicKey: getPaystackPublicKey(),
         email: contributorEmail,
@@ -88,7 +83,6 @@ export default function PublicWalletPage() {
         },
         onSuccess: async (response) => {
           try {
-            // Verify payment with backend
             await apiClient.verifyPayment(response.reference)
             setShowSuccess(true)
             setTimeout(() => {
@@ -113,10 +107,10 @@ export default function PublicWalletPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading wallet...</p>
+          <div className="animate-spin w-6 h-6 border-2 border-pink-500 border-t-transparent rounded-full mx-auto"></div>
+          <p className="mt-3 text-[13px] text-gray-400">Loading wallet...</p>
         </div>
       </div>
     )
@@ -124,33 +118,36 @@ export default function PublicWalletPage() {
 
   if (!wallet) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="max-w-md">
-          <CardContent className="text-center py-12">
-            <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Wallet Not Found</h2>
-            <p className="text-gray-600">This wallet doesn&apos;t exist or has been removed.</p>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center px-4">
+        <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 p-10 text-center max-w-md">
+          <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Wallet className="w-5 h-5 text-gray-300" />
+          </div>
+          <h2 className="text-[15px] font-semibold text-gray-900 mb-1">Wallet Not Found</h2>
+          <p className="text-[13px] text-gray-400 mb-5">This wallet doesn&apos;t exist or has been removed.</p>
+          <Link href="/">
+            <button className="px-4 py-2 text-[13px] font-medium text-pink-500 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors duration-150">
+              Back to Home
+            </button>
+          </Link>
+        </div>
       </div>
     )
   }
 
   if (showSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-white to-rose-50">
-        <Card className="max-w-md animate-scale-in">
-          <CardContent className="text-center py-12">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Check className="w-10 h-10 text-green-600" />
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Thank you! 💚</h2>
-            <p className="text-lg text-gray-600 mb-6">
-              Your contribution of {formatCurrency(parseFloat(depositAmount))} has been added to {wallet.walletName}
-            </p>
-            <p className="text-sm text-gray-500">Redirecting...</p>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center px-4">
+        <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 p-10 text-center max-w-md">
+          <div className="w-14 h-14 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-5">
+            <Check className="w-7 h-7 text-emerald-500" />
+          </div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Thank you!</h2>
+          <p className="text-[13px] text-gray-500 mb-4">
+            Your contribution of {formatCurrency(parseFloat(depositAmount))} has been added to {wallet.walletName}
+          </p>
+          <p className="text-[11px] text-gray-400">Redirecting...</p>
+        </div>
       </div>
     )
   }
@@ -158,50 +155,48 @@ export default function PublicWalletPage() {
   const progress = wallet.fundingGoal ? (wallet.balance / wallet.fundingGoal) * 100 : 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
+    <div className="min-h-screen bg-[#fafafa]">
       <Navigation />
-      
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Card className="overflow-hidden">
+
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
+        <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-pink-500 to-rose-500 px-8 py-12 text-white">
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex items-start space-x-4">
-                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                  <Heart className="w-10 h-10" fill="white" />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">{wallet.walletName}</h1>
-                  <p className="text-pink-50">Created by {wallet.creator?.fullName}</p>
-                </div>
+          <div className="bg-gradient-to-r from-pink-500 to-rose-500 px-6 py-8 text-white">
+            <div className="flex items-start space-x-4 mb-4">
+              <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0">
+                <Heart className="w-7 h-7" fill="white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold mb-1">{wallet.walletName}</h1>
+                <p className="text-[13px] text-pink-100">Created by {wallet.creator?.fullName}</p>
               </div>
             </div>
 
             {wallet.description && (
-              <p className="text-lg text-white/90 leading-relaxed max-w-2xl">
+              <p className="text-[14px] text-white/90 leading-relaxed">
                 {wallet.description}
               </p>
             )}
           </div>
 
           {/* Progress */}
-          <CardContent className="px-8 py-8">
-            <div className="mb-8">
+          <div className="px-6 py-6">
+            <div className="mb-6">
               <div className="flex justify-between items-end mb-3">
                 <div>
-                  <p className="text-4xl font-bold text-gray-900">{formatCurrency(wallet.balance)}</p>
-                  <p className="text-gray-600 mt-1">raised</p>
+                  <p className="text-2xl font-semibold text-gray-900 tabular-nums">{formatCurrency(wallet.balance)}</p>
+                  <p className="text-[12px] text-gray-400 mt-0.5">raised</p>
                 </div>
                 {wallet.fundingGoal && (
-                  <p className="text-lg text-gray-600">
+                  <p className="text-[13px] text-gray-500 tabular-nums">
                     of {formatCurrency(wallet.fundingGoal)} goal
                   </p>
                 )}
               </div>
               {wallet.fundingGoal && (
-                <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-pink-500 to-rose-500 transition-all duration-500"
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-pink-500 to-rose-500 rounded-full transition-all duration-500"
                     style={{ width: `${Math.min(progress, 100)}%` }}
                   ></div>
                 </div>
@@ -210,39 +205,38 @@ export default function PublicWalletPage() {
 
             {!showDepositForm ? (
               <>
-                <Button 
-                  size="lg" 
-                  className="w-full mb-6"
+                <button
                   onClick={() => setShowDepositForm(true)}
+                  className="w-full inline-flex items-center justify-center px-4 py-3 text-[13px] font-medium text-white bg-pink-500 rounded-lg hover:bg-pink-600 transition-colors duration-150 mb-6"
                 >
-                  <Heart className="w-5 h-5 mr-2" fill="white" />
+                  <Heart className="w-4 h-4 mr-2" fill="white" />
                   Make a Contribution
-                </Button>
+                </button>
 
                 {transactions.length > 0 && (
                   <div>
-                    <h3 className="font-bold text-lg text-gray-900 mb-4 flex items-center">
-                      <Users className="w-5 h-5 mr-2 text-pink-600" />
+                    <h3 className="text-[13px] font-semibold text-gray-900 mb-3 flex items-center">
+                      <Users className="w-4 h-4 mr-1.5 text-pink-500" />
                       Recent Contributors
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {transactions.map((tx) => (
-                        <div 
+                        <div
                           key={tx.id}
-                          className="flex items-center justify-between p-4 bg-pink-50 rounded-xl"
+                          className="flex items-center justify-between px-4 py-3 bg-pink-50/50 rounded-lg"
                         >
                           <div className="flex items-center space-x-3">
-                            <Heart className="w-5 h-5 text-pink-600" fill="currentColor" />
+                            <Heart className="w-4 h-4 text-pink-500" fill="currentColor" />
                             <div>
-                              <p className="font-semibold text-gray-900">
+                              <p className="text-[13px] font-medium text-gray-900">
                                 {tx.contributorEmail?.split('@')[0] || 'Anonymous'}
                               </p>
                               {tx.contributorMessage && (
-                                <p className="text-sm text-gray-600">&quot;{tx.contributorMessage}&quot;</p>
+                                <p className="text-[11px] text-gray-400">&quot;{tx.contributorMessage}&quot;</p>
                               )}
                             </div>
                           </div>
-                          <span className="font-bold text-pink-600">{formatCurrency(tx.amount)}</span>
+                          <span className="text-[13px] font-semibold text-pink-500 tabular-nums">{formatCurrency(tx.amount)}</span>
                         </div>
                       ))}
                     </div>
@@ -250,39 +244,45 @@ export default function PublicWalletPage() {
                 )}
               </>
             ) : (
-              <form onSubmit={handleDeposit} className="space-y-6">
+              <form onSubmit={handleDeposit} className="space-y-4">
                 {paymentError && (
-                  <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm flex items-start">
-                    <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                  <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-[13px] flex items-start">
+                    <AlertCircle className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5" />
                     <span>{paymentError}</span>
                   </div>
                 )}
 
-                <Input
-                  label="Contribution Amount (ZAR)"
-                  type="number"
-                  placeholder="500"
-                  min="10"
-                  value={depositAmount}
-                  onChange={(e) => setDepositAmount(e.target.value)}
-                  required
-                />
-
-                <Input
-                  label="Your Email (for payment receipt)"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={contributorEmail}
-                  onChange={(e) => setContributorEmail(e.target.value)}
-                  required
-                />
+                <div>
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Contribution Amount (ZAR)</label>
+                  <input
+                    type="number"
+                    placeholder="500"
+                    min="10"
+                    value={depositAmount}
+                    onChange={(e) => setDepositAmount(e.target.value)}
+                    required
+                    className="w-full px-3 py-2 text-[13px] bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500/10 focus:border-pink-300 transition-all duration-150"
+                  />
+                </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Leave a message (Optional)
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Your Email (for payment receipt)</label>
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    value={contributorEmail}
+                    onChange={(e) => setContributorEmail(e.target.value)}
+                    required
+                    className="w-full px-3 py-2 text-[13px] bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500/10 focus:border-pink-300 transition-all duration-150"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">
+                    Leave a message <span className="text-gray-300">(optional)</span>
                   </label>
                   <textarea
-                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all duration-200"
+                    className="w-full px-3 py-2 text-[13px] bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500/10 focus:border-pink-300 transition-all duration-150 resize-none"
                     placeholder="Add words of encouragement..."
                     rows={3}
                     value={contributorMessage}
@@ -290,27 +290,26 @@ export default function PublicWalletPage() {
                   />
                 </div>
 
-                <div className="flex gap-4">
-                  <Button
+                <div className="flex gap-3 pt-2">
+                  <button
                     type="button"
-                    variant="secondary"
-                    className="flex-1"
                     onClick={() => setShowDepositForm(false)}
+                    className="flex-1 px-4 py-2.5 text-[13px] font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-150"
                   >
                     Cancel
-                  </Button>
-                  <Button 
-                    type="submit" 
-                    className="flex-1"
-                    isLoading={isProcessing}
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isProcessing}
+                    className="flex-1 px-4 py-2.5 text-[13px] font-medium text-white bg-pink-500 rounded-lg hover:bg-pink-600 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Contribute {depositAmount && formatCurrency(parseFloat(depositAmount))}
-                  </Button>
+                    {isProcessing ? 'Processing...' : `Contribute ${depositAmount ? formatCurrency(parseFloat(depositAmount)) : ''}`}
+                  </button>
                 </div>
               </form>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -106,14 +106,15 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (*domain.
 func (r *userRepository) Update(ctx context.Context, user *domain.User) error {
 	query := `
 		UPDATE users
-		SET full_name = $1, phone = $2, verified = $3, updated_at = NOW()
-		WHERE id = $4
+		SET full_name = $1, phone = $2, verified = $3, password_hash = $4, updated_at = NOW()
+		WHERE id = $5
 		RETURNING updated_at`
 
 	err := r.db.Pool.QueryRow(ctx, query,
 		user.FullName,
 		user.Phone,
 		user.Verified,
+		user.PasswordHash,
 		user.ID,
 	).Scan(&user.UpdatedAt)
 

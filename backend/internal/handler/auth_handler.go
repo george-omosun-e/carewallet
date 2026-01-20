@@ -94,3 +94,33 @@ func (h *AuthHandler) GetCurrentUser(c *gin.Context) {
 
 	Success(c, user)
 }
+
+func (h *AuthHandler) ChangePassword(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		Unauthorized(c, "Not authenticated")
+		return
+	}
+
+	var req dto.ChangePasswordRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		BadRequest(c, err.Error())
+		return
+	}
+
+	err := h.authService.ChangePassword(c.Request.Context(), userID.(string), req)
+	if err != nil {
+		if errors.Is(err, domain.ErrInvalidCredentials) {
+			BadRequest(c, "Current password is incorrect")
+			return
+		}
+		if errors.Is(err, domain.ErrUserNotFound) {
+			NotFound(c, err.Error())
+			return
+		}
+		InternalError(c, "Failed to change password")
+		return
+	}
+
+	Success(c, gin.H{"message": "Password changed successfully"})
+}

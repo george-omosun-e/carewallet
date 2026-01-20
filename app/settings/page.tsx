@@ -3,9 +3,6 @@
 import { useEffect, useState } from 'react'
 import { User, Lock, Bell, CheckCircle } from 'lucide-react'
 import Navigation from '@/components/layout/Navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
-import Button from '@/components/ui/Button'
-import Input from '@/components/ui/Input'
 import { apiClient } from '@/lib/api/client'
 import { User as UserType } from '@/lib/types'
 
@@ -42,9 +39,9 @@ export default function SettingsPage() {
     setPasswordSuccess(false)
 
     const errors: Record<string, string> = {}
-    if (!passwordForm.currentPassword) errors.currentPassword = 'Current password is required'
-    if (!passwordForm.newPassword) errors.newPassword = 'New password is required'
-    if (passwordForm.newPassword.length < 8) errors.newPassword = 'Password must be at least 8 characters'
+    if (!passwordForm.currentPassword) errors.currentPassword = 'Required'
+    if (!passwordForm.newPassword) errors.newPassword = 'Required'
+    if (passwordForm.newPassword.length < 8) errors.newPassword = 'Min 8 characters'
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match'
     }
@@ -68,12 +65,12 @@ export default function SettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
+      <div className="min-h-screen bg-[#fafafa]">
         <Navigation />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading settings...</p>
+            <div className="animate-spin w-6 h-6 border-2 border-pink-500 border-t-transparent rounded-full mx-auto"></div>
+            <p className="mt-3 text-[13px] text-gray-400">Loading settings...</p>
           </div>
         </div>
       </div>
@@ -81,38 +78,38 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
+    <div className="min-h-screen bg-[#fafafa]">
       <Navigation />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
-          <p className="text-gray-600">Manage your account preferences</p>
+          <h1 className="text-xl font-semibold text-gray-900 tracking-tight">Settings</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Manage your account preferences</p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Profile Section */}
-          <Card>
-            <CardHeader>
+          <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-50">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-pink-100 rounded-xl flex items-center justify-center">
-                  <User className="w-5 h-5 text-pink-600" />
+                <div className="w-8 h-8 bg-pink-50 rounded-lg flex items-center justify-center">
+                  <User className="w-4 h-4 text-pink-500" />
                 </div>
-                <CardTitle>Profile Information</CardTitle>
+                <h2 className="text-[13px] font-semibold text-gray-900">Profile Information</h2>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-6">
+            </div>
+            <div className="p-5">
+              <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-                  <p className="px-4 py-3 bg-gray-50 rounded-xl text-gray-900">{user?.fullName || '-'}</p>
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Full Name</label>
+                  <p className="px-3 py-2 text-[13px] bg-gray-50/80 rounded-lg text-gray-900">{user?.fullName || '-'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Email</label>
                   <div className="flex items-center space-x-2">
-                    <p className="flex-1 px-4 py-3 bg-gray-50 rounded-xl text-gray-900">{user?.email || '-'}</p>
+                    <p className="flex-1 px-3 py-2 text-[13px] bg-gray-50/80 rounded-lg text-gray-900">{user?.email || '-'}</p>
                     {user?.verified && (
-                      <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full flex items-center">
+                      <span className="px-2 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-medium rounded flex items-center">
                         <CheckCircle className="w-3 h-3 mr-1" />
                         Verified
                       </span>
@@ -121,116 +118,129 @@ export default function SettingsPage() {
                 </div>
                 {user?.phone && (
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
-                    <p className="px-4 py-3 bg-gray-50 rounded-xl text-gray-900">{user.phone}</p>
+                    <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Phone</label>
+                    <p className="px-3 py-2 text-[13px] bg-gray-50/80 rounded-lg text-gray-900">{user.phone}</p>
                   </div>
                 )}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Change Password Section */}
-          <Card>
-            <CardHeader>
+          <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-50">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center">
-                  <Lock className="w-5 h-5 text-rose-600" />
+                <div className="w-8 h-8 bg-rose-50 rounded-lg flex items-center justify-center">
+                  <Lock className="w-4 h-4 text-rose-500" />
                 </div>
-                <CardTitle>Change Password</CardTitle>
+                <h2 className="text-[13px] font-semibold text-gray-900">Change Password</h2>
               </div>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
+            </div>
+            <div className="p-5">
+              <form onSubmit={handleChangePassword} className="space-y-4 max-w-sm">
                 {passwordErrors.general && (
-                  <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm">
+                  <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-[13px]">
                     {passwordErrors.general}
                   </div>
                 )}
                 {passwordSuccess && (
-                  <div className="bg-green-50 text-green-600 p-4 rounded-xl text-sm flex items-center">
+                  <div className="bg-emerald-50 text-emerald-600 px-4 py-3 rounded-lg text-[13px] flex items-center">
                     <CheckCircle className="w-4 h-4 mr-2" />
                     Password changed successfully
                   </div>
                 )}
-                <Input
-                  label="Current Password"
-                  type="password"
-                  placeholder="Enter current password"
-                  value={passwordForm.currentPassword}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                  error={passwordErrors.currentPassword}
-                />
-                <Input
-                  label="New Password"
-                  type="password"
-                  placeholder="At least 8 characters"
-                  value={passwordForm.newPassword}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                  error={passwordErrors.newPassword}
-                />
-                <Input
-                  label="Confirm New Password"
-                  type="password"
-                  placeholder="Re-enter new password"
-                  value={passwordForm.confirmPassword}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                  error={passwordErrors.confirmPassword}
-                />
-                <Button type="submit" isLoading={isChangingPassword}>
-                  Update Password
-                </Button>
+                <div>
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Current Password</label>
+                  <input
+                    type="password"
+                    placeholder="Enter current password"
+                    value={passwordForm.currentPassword}
+                    onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
+                    className="w-full px-3 py-2 text-[13px] bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500/10 focus:border-pink-300 transition-all duration-150"
+                  />
+                  {passwordErrors.currentPassword && <p className="mt-1 text-[11px] text-red-500">{passwordErrors.currentPassword}</p>}
+                </div>
+                <div>
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">New Password</label>
+                  <input
+                    type="password"
+                    placeholder="At least 8 characters"
+                    value={passwordForm.newPassword}
+                    onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+                    className="w-full px-3 py-2 text-[13px] bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500/10 focus:border-pink-300 transition-all duration-150"
+                  />
+                  {passwordErrors.newPassword && <p className="mt-1 text-[11px] text-red-500">{passwordErrors.newPassword}</p>}
+                </div>
+                <div>
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Confirm New Password</label>
+                  <input
+                    type="password"
+                    placeholder="Re-enter new password"
+                    value={passwordForm.confirmPassword}
+                    onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
+                    className="w-full px-3 py-2 text-[13px] bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500/10 focus:border-pink-300 transition-all duration-150"
+                  />
+                  {passwordErrors.confirmPassword && <p className="mt-1 text-[11px] text-red-500">{passwordErrors.confirmPassword}</p>}
+                </div>
+                <button
+                  type="submit"
+                  disabled={isChangingPassword}
+                  className="px-4 py-2 text-[13px] font-medium text-white bg-pink-500 rounded-lg hover:bg-pink-600 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isChangingPassword ? 'Updating...' : 'Update Password'}
+                </button>
               </form>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Notification Preferences Section */}
-          <Card>
-            <CardHeader>
+          <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-50">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                  <Bell className="w-5 h-5 text-amber-600" />
+                <div className="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
+                  <Bell className="w-4 h-4 text-amber-500" />
                 </div>
-                <CardTitle>Notification Preferences</CardTitle>
+                <h2 className="text-[13px] font-semibold text-gray-900">Notification Preferences</h2>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+            </div>
+            <div className="p-5">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between px-4 py-3 bg-gray-50/80 rounded-lg">
                   <div>
-                    <p className="font-semibold text-gray-900">Email Notifications</p>
-                    <p className="text-sm text-gray-600">Receive updates about your wallets via email</p>
+                    <p className="text-[13px] font-medium text-gray-900">Email Notifications</p>
+                    <p className="text-[11px] text-gray-400">Receive updates about your wallets via email</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" defaultChecked className="sr-only peer" />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-pink-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-pink-500"></div>
                   </label>
                 </div>
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                <div className="flex items-center justify-between px-4 py-3 bg-gray-50/80 rounded-lg">
                   <div>
-                    <p className="font-semibold text-gray-900">Contribution Alerts</p>
-                    <p className="text-sm text-gray-600">Get notified when someone contributes to your wallets</p>
+                    <p className="text-[13px] font-medium text-gray-900">Contribution Alerts</p>
+                    <p className="text-[11px] text-gray-400">Get notified when someone contributes to your wallets</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" defaultChecked className="sr-only peer" />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-pink-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-pink-500"></div>
                   </label>
                 </div>
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                <div className="flex items-center justify-between px-4 py-3 bg-gray-50/80 rounded-lg">
                   <div>
-                    <p className="font-semibold text-gray-900">Withdrawal Alerts</p>
-                    <p className="text-sm text-gray-600">Get notified about withdrawal activities</p>
+                    <p className="text-[13px] font-medium text-gray-900">Withdrawal Alerts</p>
+                    <p className="text-[11px] text-gray-400">Get notified about withdrawal activities</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" defaultChecked className="sr-only peer" />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-pink-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-pink-500"></div>
                   </label>
                 </div>
               </div>
-              <p className="text-sm text-gray-500 mt-4">
+              <p className="text-[11px] text-gray-400 mt-4">
                 Note: Notification preferences are placeholders and will be fully implemented in a future update.
               </p>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>

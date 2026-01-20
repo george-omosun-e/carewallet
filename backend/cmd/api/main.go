@@ -136,6 +136,7 @@ func main() {
 			auth.POST("/login", authHandler.Login)
 			auth.POST("/logout", authMiddleware.RequireAuth(), authHandler.Logout)
 			auth.GET("/me", authMiddleware.RequireAuth(), authHandler.GetCurrentUser)
+			auth.PUT("/password", authMiddleware.RequireAuth(), authHandler.ChangePassword)
 		}
 
 		// Wallet routes

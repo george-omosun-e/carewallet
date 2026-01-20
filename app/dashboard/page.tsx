@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Plus, TrendingUp, Heart, ExternalLink, Copy } from 'lucide-react'
+import { Plus, TrendingUp, Heart, ExternalLink, Copy, Wallet as WalletIcon } from 'lucide-react'
 import Navigation from '@/components/layout/Navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
-import Button from '@/components/ui/Button'
 import { apiClient } from '@/lib/api/client'
 import { Wallet } from '@/lib/types'
 import { formatCurrency } from '@/lib/utils'
@@ -13,6 +11,7 @@ import { formatCurrency } from '@/lib/utils'
 export default function DashboardPage() {
   const [wallets, setWallets] = useState<Wallet[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [copiedCode, setCopiedCode] = useState<string | null>(null)
 
   useEffect(() => {
     loadWallets()
@@ -32,130 +31,127 @@ export default function DashboardPage() {
   const copyShareLink = (code: string) => {
     const url = `${window.location.origin}/wallet/${code}`
     navigator.clipboard.writeText(url)
-    alert('Share link copied to clipboard!')
+    setCopiedCode(code)
+    setTimeout(() => setCopiedCode(null), 2000)
   }
 
   const totalBalance = wallets.reduce((sum, w) => sum + w.balance, 0)
   const activeWallets = wallets.filter(w => w.status === 'active').length
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
+    <div className="min-h-screen bg-[#fafafa]">
       <Navigation />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Health Wallets</h1>
-          <p className="text-gray-600">Manage and track all your healthcare funding</p>
+          <h1 className="text-xl font-semibold text-gray-900 tracking-tight">Your Health Wallets</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Manage and track all your healthcare funding</p>
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 mb-1">Total Balance</p>
-                  <p className="text-3xl font-bold text-pink-600">{formatCurrency(totalBalance)}</p>
-                </div>
-                <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-pink-600" />
-                </div>
+        <div className="grid md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 p-5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">Total Balance</p>
+                <p className="text-2xl font-semibold text-pink-500 mt-1 tracking-tight">{formatCurrency(totalBalance)}</p>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 mb-1">Active Wallets</p>
-                  <p className="text-3xl font-bold text-rose-500">{activeWallets}</p>
-                </div>
-                <div className="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center">
-                  <Heart className="w-6 h-6 text-rose-500" fill="currentColor" />
-                </div>
+              <div className="w-9 h-9 bg-pink-50 rounded-lg flex items-center justify-center">
+                <TrendingUp className="w-4 h-4 text-pink-500" />
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card>
-            <CardContent className="pt-6">
-              <Link href="/dashboard/create">
-                <Button className="w-full h-full" size="lg">
-                  <Plus className="w-5 h-5 mr-2" />
-                  Create New Wallet
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+          <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 p-5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">Active Wallets</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-1 tracking-tight">{activeWallets}</p>
+              </div>
+              <div className="w-9 h-9 bg-rose-50 rounded-lg flex items-center justify-center">
+                <Heart className="w-4 h-4 text-rose-500" fill="currentColor" />
+              </div>
+            </div>
+          </div>
+
+          <Link href="/dashboard/create" className="block">
+            <div className="bg-pink-500 rounded-xl p-5 hover:bg-pink-600 transition-colors duration-150 h-full flex items-center justify-center group">
+              <div className="flex items-center space-x-2 text-white">
+                <Plus className="w-4 h-4" />
+                <span className="text-[13px] font-medium">Create New Wallet</span>
+              </div>
+            </div>
+          </Link>
         </div>
 
         {/* Wallets List */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">Your Wallets</h2>
-          
+        <div className="space-y-4">
+          <h2 className="text-[13px] font-semibold text-gray-900">Your Wallets</h2>
+
           {isLoading ? (
             <div className="text-center py-12">
-              <div className="animate-spin w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading wallets...</p>
+              <div className="animate-spin w-6 h-6 border-2 border-pink-500 border-t-transparent rounded-full mx-auto"></div>
+              <p className="mt-3 text-[13px] text-gray-400">Loading wallets...</p>
             </div>
           ) : wallets.length === 0 ? (
-            <Card>
-              <CardContent className="text-center py-12">
-                <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-gray-900 mb-2">No wallets yet</h3>
-                <p className="text-gray-600 mb-6">Create your first health wallet to get started</p>
-                <Link href="/dashboard/create">
-                  <Button>
-                    <Plus className="w-5 h-5 mr-2" />
-                    Create Your First Wallet
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 p-10 text-center">
+              <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <WalletIcon className="w-5 h-5 text-gray-300" />
+              </div>
+              <h3 className="text-[14px] font-semibold text-gray-900 mb-1">No wallets yet</h3>
+              <p className="text-[13px] text-gray-400 mb-5">Create your first health wallet to get started</p>
+              <Link href="/dashboard/create">
+                <button className="inline-flex items-center px-4 py-2 text-[13px] font-medium text-white bg-pink-500 rounded-lg hover:bg-pink-600 transition-colors duration-150">
+                  <Plus className="w-4 h-4 mr-1.5" />
+                  Create Your First Wallet
+                </button>
+              </Link>
+            </div>
           ) : (
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-4">
               {wallets.map((wallet) => (
-                <Card key={wallet.id} className="hover:shadow-2xl transition-all">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
+                <div
+                  key={wallet.id}
+                  className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-100/80 overflow-hidden hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all duration-200"
+                >
+                  <div className="p-5">
+                    <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start space-x-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-rose-400 rounded-xl flex-shrink-0"></div>
+                        <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-rose-400 rounded-lg flex-shrink-0"></div>
                         <div>
-                          <CardTitle>{wallet.walletName}</CardTitle>
+                          <h3 className="text-[14px] font-semibold text-gray-900">{wallet.walletName}</h3>
                           {wallet.beneficiary && (
-                            <p className="text-sm text-gray-600 mt-1">
-                              Beneficiary: {wallet.beneficiary.fullName}
+                            <p className="text-[12px] text-gray-400 mt-0.5">
+                              {wallet.beneficiary.fullName}
                             </p>
                           )}
                         </div>
                       </div>
                       <Link href={`/dashboard/wallet/${wallet.id}`}>
-                        <ExternalLink className="w-5 h-5 text-gray-400 hover:text-pink-600" />
+                        <ExternalLink className="w-4 h-4 text-gray-300 hover:text-pink-500 transition-colors duration-150" />
                       </Link>
                     </div>
-                  </CardHeader>
-                  <CardContent>
+
                     {wallet.description && (
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">{wallet.description}</p>
+                      <p className="text-[12px] text-gray-400 mb-4 line-clamp-2">{wallet.description}</p>
                     )}
-                    
+
                     <div className="mb-4">
-                      <div className="flex justify-between text-sm mb-2">
-                        <span className="font-semibold text-gray-700">
+                      <div className="flex justify-between text-[13px] mb-2">
+                        <span className="font-semibold text-gray-900 tabular-nums">
                           {formatCurrency(wallet.balance)}
                         </span>
                         {wallet.fundingGoal && (
-                          <span className="text-gray-600">
+                          <span className="text-gray-400 tabular-nums">
                             of {formatCurrency(wallet.fundingGoal)}
                           </span>
                         )}
                       </div>
                       {wallet.fundingGoal && (
-                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-gradient-to-r from-pink-500 to-rose-500"
+                        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-pink-500 to-rose-500 rounded-full"
                             style={{ width: `${Math.min((wallet.balance / wallet.fundingGoal) * 100, 100)}%` }}
                           ></div>
                         </div>
@@ -163,23 +159,21 @@ export default function DashboardPage() {
                     </div>
 
                     <div className="flex gap-2">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        className="flex-1"
+                      <button
                         onClick={() => copyShareLink(wallet.shareableCode)}
+                        className="flex-1 inline-flex items-center justify-center px-3 py-2 text-[12px] font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-150"
                       >
-                        <Copy className="w-4 h-4 mr-2" />
-                        Share Link
-                      </Button>
+                        <Copy className="w-3.5 h-3.5 mr-1.5" />
+                        {copiedCode === wallet.shareableCode ? 'Copied!' : 'Share Link'}
+                      </button>
                       <Link href={`/dashboard/wallet/${wallet.id}`} className="flex-1">
-                        <Button variant="ghost" size="sm" className="w-full">
+                        <button className="w-full px-3 py-2 text-[12px] font-medium text-pink-500 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors duration-150">
                           View Details
-                        </Button>
+                        </button>
                       </Link>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
           )}
