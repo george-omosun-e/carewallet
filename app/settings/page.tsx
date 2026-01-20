@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { User, Lock, Bell, CheckCircle } from 'lucide-react'
+import Link from 'next/link'
+import { User, Lock, Bell, CheckCircle, ArrowLeft } from 'lucide-react'
 import Navigation from '@/components/layout/Navigation'
 import { apiClient } from '@/lib/api/client'
 import { User as UserType } from '@/lib/types'
@@ -83,6 +84,13 @@ export default function SettingsPage() {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
         <div className="mb-8">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center text-[13px] text-gray-400 hover:text-gray-600 mb-4 transition-colors duration-150"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 mr-1.5" />
+            Back to Dashboard
+          </Link>
           <h1 className="text-xl font-semibold text-gray-900 tracking-tight">Settings</h1>
           <p className="text-sm text-gray-400 mt-0.5">Manage your account preferences</p>
         </div>

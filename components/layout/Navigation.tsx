@@ -24,10 +24,10 @@ export default function Navigation() {
     }
   }
 
-  const isDashboard = pathname.startsWith('/dashboard')
+  const isLoggedInArea = pathname.startsWith('/dashboard') || pathname === '/settings'
 
-  // Dashboard navigation
-  if (isDashboard) {
+  // Logged-in user navigation (dashboard, settings)
+  if (isLoggedInArea) {
     return (
       <nav className="bg-white/70 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
